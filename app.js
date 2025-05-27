@@ -22,7 +22,6 @@ const pageContext = window.location.pathname.includes("helfer")
     ? "verpflegung"
     : "orga";
 
-// Hilfsfunktionen
 function sanitizeKey(input) {
   return input.replace(/[^\w\s]/g, '').replace(/\s+/g, '_');
 }
@@ -32,7 +31,7 @@ function formatTime(ts) {
   return `${d.toLocaleDateString('de-DE')} – ${d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
-// Eventdaten aus dem Flyer
+// Events
 const events = {
   "Dienstag, 15.07.2025": [
     { time: "19:00", title: "Herrenspiele höhere Klassen" },
@@ -102,6 +101,10 @@ function renderPlan() {
       title.className = 'event-title';
       title.textContent = `🕒 ${item.time} – ${item.title}`;
 
+      const statusBtn = document.createElement('button');
+      statusBtn.textContent = '⬜ Offen';
+      statusBtn.style.backgroundColor = '#ccc';
+
       const grid = document.createElement('div');
       grid.className = 'input-grid';
 
@@ -118,9 +121,12 @@ function renderPlan() {
       const notes = document.createElement('div');
       notes.className = 'notes';
 
+      // Daten lesen
       onValue(dbRef, snapshot => {
-        const data = snapshot.val() || { responsible: "", notes: [] };
+        const data = snapshot.val() || { responsible: "", notes: [], done: false };
         responsible.value = data.responsible || '';
+        statusBtn.textContent = data.done ? '✅ Erledigt' : '⬜ Offen';
+        statusBtn.style.backgroundColor = data.done ? '#28a745' : '#ccc';
         notes.innerHTML = '';
         (data.notes || []).forEach((n, index) => {
           const p = document.createElement('div');
@@ -144,15 +150,24 @@ function renderPlan() {
         });
       });
 
+      statusBtn.onclick = async () => {
+        const snapshot = await get(dbRef);
+        const data = snapshot.val() || {};
+        const newStatus = !(data.done === true);
+        data.done = newStatus;
+        await set(dbRef, data);
+      };
+
       saveBtn.onclick = async () => {
         const noteText = note.value.trim();
         if (!noteText && !responsible.value.trim()) return;
 
         const snapshot = await get(dbRef);
-        const data = snapshot.val() || { responsible: "", notes: [] };
+        const data = snapshot.val() || { responsible: "", notes: [], done: false };
         const updated = {
           responsible: responsible.value,
-          notes: data.notes || []
+          notes: data.notes || [],
+          done: data.done || false
         };
 
         if (noteText) {
@@ -168,6 +183,7 @@ function renderPlan() {
       grid.appendChild(saveBtn);
 
       eventEl.appendChild(title);
+      eventEl.appendChild(statusBtn);
       eventEl.appendChild(grid);
       eventEl.appendChild(notes);
       dayCard.appendChild(eventEl);
@@ -182,7 +198,7 @@ function renderPlan() {
   };
 }
 
-// Scroll-Button
+// ⬆️ Scroll to top
 const backBtn = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
   backBtn.style.display = window.scrollY > 300 ? 'block' : 'none';

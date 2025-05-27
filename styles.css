@@ -24,7 +24,6 @@ body {
   padding: 20px;
 }
 
-/* Header + Navigation */
 .nav-bar {
   display: flex;
   align-items: center;
@@ -59,7 +58,6 @@ body {
   text-decoration: underline;
 }
 
-/* Burger Menü */
 .burger {
   font-size: 1.6rem;
   color: white;
@@ -91,7 +89,6 @@ body {
   }
 }
 
-/* Dropdown Navigation */
 .day-nav {
   display: flex;
   justify-content: center;
@@ -107,7 +104,6 @@ body {
   border: 1px solid #ccc;
 }
 
-/* Zurück nach oben */
 .back-to-top {
   position: fixed;
   bottom: 25px;
@@ -129,7 +125,6 @@ body {
   background: #0056b3;
 }
 
-/* Tageskarten */
 .day-card {
   background: white;
   border-radius: var(--radius);
@@ -160,7 +155,21 @@ body {
   color: var(--text);
 }
 
-/* Responsives Eingabeformular */
+/* Status-Button */
+.event > button {
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Dynamik via JS:
+   - backgroundColor: "#28a745" für ✅
+   - "#ccc" für ⬜ */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 2fr auto;
@@ -178,7 +187,6 @@ body {
   }
 }
 
-/* Formularelemente */
 input[type="text"],
 textarea {
   width: 100%;
@@ -195,7 +203,6 @@ textarea:focus {
   outline: none;
 }
 
-/* Speichern Button */
 button {
   padding: 10px 14px;
   background-color: var(--success);
@@ -210,7 +217,6 @@ button:hover {
   background-color: #1e7e34;
 }
 
-/* Notizliste */
 .notes {
   background: var(--primary-light);
   padding: 10px;
