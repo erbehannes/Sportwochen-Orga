@@ -24,6 +24,7 @@ body {
   padding: 20px;
 }
 
+/* Header + Navigation */
 .nav-bar {
   display: flex;
   align-items: center;
@@ -167,9 +168,6 @@ body {
   margin-bottom: 5px;
 }
 
-/* Dynamik via JS:
-   - backgroundColor: "#28a745" für ✅
-   - "#ccc" für ⬜ */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 2fr auto;

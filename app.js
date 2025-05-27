@@ -1,21 +1,23 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-messaging.js";
 
-// Firebase-Konfiguration
+// Firebase Konfiguration
 const firebaseConfig = {
   apiKey: "AIzaSyBvDHcYfeQdIwmXd3qnF97K-PQKH4NICf0",
   authDomain: "sportwoche-sv-langen.firebaseapp.com",
   databaseURL: "https://sportwoche-sv-langen-default-rtdb.europe-west1.firebasedatabase.app/",
   projectId: "sportwoche-sv-langen",
-  storageBucket: "sportwoche-sv-langen.firebasestorage.app",
+  storageBucket: "sportwoche-sv-langen.appspot.com",
   messagingSenderId: "529824987070",
   appId: "1:529824987070:web:d8933f03fdd1a74598abef"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const messaging = getMessaging();
 
-// Seiten-Kontext definieren
+// Seitenkontext bestimmen
 const pageContext = window.location.pathname.includes("helfer")
   ? "helfer"
   : window.location.pathname.includes("verpflegung")
@@ -31,7 +33,6 @@ function formatTime(ts) {
   return `${d.toLocaleDateString('de-DE')} – ${d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
-// Events
 const events = {
   "Dienstag, 15.07.2025": [
     { time: "19:00", title: "Herrenspiele höhere Klassen" },
@@ -75,7 +76,6 @@ function renderPlan() {
 
   Object.entries(events).forEach(([day, list]) => {
     const anchorId = sanitizeKey(day);
-
     const option = document.createElement('option');
     option.value = anchorId;
     option.textContent = day;
@@ -121,7 +121,6 @@ function renderPlan() {
       const notes = document.createElement('div');
       notes.className = 'notes';
 
-      // Daten lesen
       onValue(dbRef, snapshot => {
         const data = snapshot.val() || { responsible: "", notes: [], done: false };
         responsible.value = data.responsible || '';
@@ -132,7 +131,6 @@ function renderPlan() {
           const p = document.createElement('div');
           p.className = 'note-entry';
           p.innerHTML = `<span><strong>${formatTime(n.timestamp)}:</strong> ${n.text}</span>`;
-
           const delBtn = document.createElement('button');
           delBtn.textContent = '🗑️';
           delBtn.onclick = async () => {
@@ -144,7 +142,6 @@ function renderPlan() {
               await set(dbRef, d);
             }
           };
-
           p.appendChild(delBtn);
           notes.appendChild(p);
         });
@@ -161,7 +158,6 @@ function renderPlan() {
       saveBtn.onclick = async () => {
         const noteText = note.value.trim();
         if (!noteText && !responsible.value.trim()) return;
-
         const snapshot = await get(dbRef);
         const data = snapshot.val() || { responsible: "", notes: [], done: false };
         const updated = {
@@ -169,11 +165,9 @@ function renderPlan() {
           notes: data.notes || [],
           done: data.done || false
         };
-
         if (noteText) {
           updated.notes.push({ text: noteText, timestamp: Date.now() });
         }
-
         await set(dbRef, updated);
         note.value = '';
       };
@@ -198,7 +192,7 @@ function renderPlan() {
   };
 }
 
-// ⬆️ Scroll to top
+// Scroll Button
 const backBtn = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
   backBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
@@ -208,3 +202,20 @@ backBtn.onclick = () => {
 };
 
 document.addEventListener('DOMContentLoaded', renderPlan);
+
+// Push-Benachrichtigung einrichten
+Notification.requestPermission().then((permission) => {
+  if (permission === 'granted') {
+    getToken(messaging, {
+      vapidKey: 'BFB5pM2lTyyDVi9siSOEpa2BXP8jHH8QbufsCUnHKAnpsyG684Vf0Pqtrc79DXcdxUNzGxiHI3qgbn-JfMM5cOU'
+    }).then((token) => {
+      if (token) console.log("Push-Token:", token);
+    }).catch((err) => {
+      console.warn("Token Fehler:", err);
+    });
+  }
+});
+
+onMessage(messaging, (payload) => {
+  alert(`${payload.notification.title}\n${payload.notification.body}`);
+});

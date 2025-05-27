@@ -4,16 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Helfer – Sportwoche 2025</title>
-  <link rel="stylesheet" href="styles.css" />
   <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="icons/icon-192.png" />
   <meta name="theme-color" content="#007bff" />
+  <script src="https://www.gstatic.com/firebasejs/11.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.8.1/firebase-messaging-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvDHcYfeQdIwmXd3qnF97K-PQKH4NICf0",
+      authDomain: "sportwoche-sv-langen.firebaseapp.com",
+      projectId: "sportwoche-sv-langen",
+      storageBucket: "sportwoche-sv-langen.appspot.com",
+      messagingSenderId: "529824987070",
+      appId: "1:529824987070:web:d8933f03fdd1a74598abef"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 <body>
   <div class="app-shell">
     <header>
       <div class="nav-bar">
-        <h1>🧍‍♂️ Helfer-Planung</h1>
+        <h1>🧑‍🔧 Helferplanung</h1>
         <nav class="nav-links" id="nav-links">
           <a href="index.html">Orga-Plan</a>
           <a href="helfer.html" class="active">Helfer</a>
@@ -38,12 +51,13 @@
     document.getElementById('burger').onclick = () => {
       document.getElementById('nav-links').classList.toggle('open');
     };
+
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('✅ SW aktiv'))
-        .catch(err => console.error('❌ SW Fehler:', err));
+      navigator.serviceWorker.register('firebase-messaging-sw.js')
+        .then(() => console.log("✅ Firebase Messaging SW registriert"));
     }
   </script>
+
   <script type="module" src="app.js"></script>
 </body>
 </html>
