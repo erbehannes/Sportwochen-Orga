@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sportwoche 2025 – Orga Planer</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <meta name="theme-color" content="#007bff" />
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="nav-bar">
+        <h1>📅 Sportwoche 2025</h1>
+        <nav class="nav-links" id="nav-links">
+          <a href="index.html" class="active">Orga-Plan</a>
+          <a href="helfer.html">Helfer</a>
+          <a href="verpflegung.html">Essen & Getränke</a>
+        </nav>
+        <button class="burger" id="burger">☰</button>
+      </div>
+    </header>
+
+    <nav class="day-nav">
+      <select id="day-select" class="day-select"></select>
+    </nav>
+
+    <main id="week-plan" class="week-plan">
+      <!-- Dynamisch durch JS -->
+    </main>
+  </div>
+
+  <button id="backToTop" class="back-to-top">⬆️</button>
+
+  <script>
+    // Burger-Menü toggeln
+    document.getElementById('burger').onclick = () => {
+      document.getElementById('nav-links').classList.toggle('open');
+    };
+
+    // Service Worker aktivieren
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('✅ SW aktiv'))
+        .catch(err => console.error('❌ SW Fehler:', err));
+    }
+  </script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

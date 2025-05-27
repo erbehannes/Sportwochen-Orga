@@ -1,0 +1,224 @@
+:root {
+  --primary: #007bff;
+  --primary-light: #e7f1ff;
+  --success: #28a745;
+  --danger: #dc3545;
+  --bg: #f4f6f8;
+  --text: #212529;
+  --radius: 8px;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  --font: "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background-color: var(--bg);
+  color: var(--text);
+  scroll-behavior: smooth;
+}
+
+.app-shell {
+  max-width: 960px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Header + Nav Bar */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--primary);
+  padding: 15px 20px;
+  border-radius: var(--radius);
+  color: white;
+  position: relative;
+}
+
+.nav-bar h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+  transition: max-height 0.3s ease;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  text-decoration: underline;
+}
+
+/* Burger Button */
+.burger {
+  font-size: 1.6rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .burger {
+    display: block;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    background: var(--primary);
+    position: absolute;
+    top: 58px;
+    right: 20px;
+    padding: 10px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: none;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+}
+
+/* Tages-Navigation Dropdown */
+.day-nav {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.day-select {
+  width: 100%;
+  max-width: 320px;
+  font-size: 1rem;
+  padding: 8px;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+}
+
+/* Zurück nach oben */
+.back-to-top {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: none;
+  box-shadow: var(--shadow);
+  z-index: 200;
+}
+
+.back-to-top:hover {
+  background: #0056b3;
+}
+
+/* Tagesinhalt */
+.day-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+  scroll-margin-top: 100px;
+}
+
+.day-header {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 12px 16px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-bottom: 1px solid #dbe3ef;
+}
+
+.event {
+  border-top: 1px solid #eee;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.event-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  background-color: #fff;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+button {
+  padding: 10px 14px;
+  background-color: var(--success);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1e7e34;
+}
+
+.notes {
+  background: var(--primary-light);
+  padding: 10px;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.note-entry {
+  margin-bottom: 8px;
+  border-left: 3px solid var(--primary);
+  padding-left: 10px;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.note-entry button {
+  background: none;
+  color: var(--danger);
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+}
