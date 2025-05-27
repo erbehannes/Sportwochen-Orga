@@ -24,7 +24,7 @@ body {
   padding: 20px;
 }
 
-/* Header + Nav Bar */
+/* Header + Navigation */
 .nav-bar {
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@ body {
   text-decoration: underline;
 }
 
-/* Burger Button */
+/* Burger Menü */
 .burger {
   font-size: 1.6rem;
   color: white;
@@ -91,7 +91,7 @@ body {
   }
 }
 
-/* Tages-Navigation Dropdown */
+/* Dropdown Navigation */
 .day-nav {
   display: flex;
   justify-content: center;
@@ -129,7 +129,7 @@ body {
   background: #0056b3;
 }
 
-/* Tagesinhalt */
+/* Tageskarten */
 .day-card {
   background: white;
   border-radius: var(--radius);
@@ -160,6 +160,7 @@ body {
   color: var(--text);
 }
 
+/* Responsives Eingabeformular */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 2fr auto;
@@ -167,6 +168,17 @@ body {
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .input-grid button {
+    width: 100%;
+  }
+}
+
+/* Formularelemente */
 input[type="text"],
 textarea {
   width: 100%;
@@ -183,6 +195,7 @@ textarea:focus {
   outline: none;
 }
 
+/* Speichern Button */
 button {
   padding: 10px 14px;
   background-color: var(--success);
@@ -197,6 +210,7 @@ button:hover {
   background-color: #1e7e34;
 }
 
+/* Notizliste */
 .notes {
   background: var(--primary-light);
   padding: 10px;
