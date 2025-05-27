@@ -1,8 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
-import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-messaging.js";
 
-// 🔥 Firebase Konfiguration
+// Firebase Konfiguration
 const firebaseConfig = {
   apiKey: "AIzaSyBvDHcYfeQdIwmXd3qnF97K-PQKH4NICf0",
   authDomain: "sportwoche-sv-langen.firebaseapp.com",
@@ -15,7 +14,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const messaging = getMessaging();
 
 const pageContext = window.location.pathname.includes("helfer")
   ? "helfer"
@@ -32,7 +30,7 @@ function formatTime(ts) {
   return `${d.toLocaleDateString('de-DE')} – ${d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
-// 📅 Tagesprogramm
+// Veranstaltungen
 const events = {
   "Dienstag, 15.07.2025": [
     { time: "19:00", title: "Herrenspiele höhere Klassen" },
@@ -156,23 +154,6 @@ function renderPlan() {
       };
 
       saveBtn.onclick = async () => {
-        // Push-Berechtigung beim Speichern abfragen
-        if (Notification.permission !== 'granted') {
-          Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-              getToken(messaging, {
-                vapidKey: 'BFB5pM2lTyyDVi9siSOEpa2BXP8jHH8QbufsCUnHKAnpsyG684Vf0Pqtrc79DXcdxUNzGxiHI3qgbn-JfMM5cOU'
-              }).then(token => {
-                console.log("📲 Push-Token gespeichert:", token);
-              }).catch(err => {
-                console.warn("❌ Fehler beim Push-Token:", err);
-              });
-            } else {
-              console.log("🔕 Push-Berechtigung nicht erteilt.");
-            }
-          });
-        }
-
         const noteText = note.value.trim();
         if (!noteText && !responsible.value.trim()) return;
         const snapshot = await get(dbRef);
@@ -209,7 +190,7 @@ function renderPlan() {
   };
 }
 
-// ⬆️ Scroll-To-Top
+// Zurück-nach-oben Button
 const backBtn = document.getElementById('backToTop');
 window.addEventListener('scroll', () => {
   backBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
@@ -219,8 +200,3 @@ backBtn.onclick = () => {
 };
 
 document.addEventListener('DOMContentLoaded', renderPlan);
-
-// 🔔 Direktanzeige im Vordergrund
-onMessage(messaging, (payload) => {
-  alert(`${payload.notification.title}\n${payload.notification.body}`);
-});
